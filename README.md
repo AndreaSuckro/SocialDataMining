@@ -7,14 +7,6 @@ Repository for the WS2014 course of the University of Osnabrück. Will include l
 Setup for Windows
 ================
 
-1) Install Python (3.x)
-	- set PYTHONHOME
-	- set PYTHONPATH
-2) Install MySQl
-	- install connectors for python
-3) If using Eclipse: install PyDev plugin and EGit (or use GitExt)
+We start by using R. So just install R (http://cran.r-project.org) and RStudio (http://www.rstudio.com/)
 
-
-
-
-hahah tototlorltoltrolraomotmalfnjobgsüp rofl
+Data from the StudIp should be placed in the data-directory.
