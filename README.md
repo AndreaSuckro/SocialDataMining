@@ -7,6 +7,4 @@ Repository for the WS2014 course of the University of Osnabrück. Will include l
 Setup for Windows
 ================
 
-We start by using R. So just install R (http://cran.r-project.org) and RStudio (http://www.rstudio.com/)
-
-Data from the StudIp should be placed in the data-directory.
+We decided to use Python(x,y), because it comes with a lot of preinstalled libaries and is easy to use. Find the installer here: https://code.google.com/p/pythonxy/
