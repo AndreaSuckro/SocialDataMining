@@ -17,8 +17,8 @@ timespan = 86400
 #scale of the graph (size of the time slots) in seconds
 scale = 60.0
 #search pattern (regex), for all tweets just put ""
-#pattern = "g+o+a+l+|t+o+r+|m+e+t+a+|g+o+l+"
-pattern = ""
+pattern = "g+o+a+l+|t+o+r+|m+e+t+a+|g+o+l+"
+#pattern = ""
 
 def contains(row, pattern):
     if(re.search(pattern, row)):
@@ -102,7 +102,7 @@ file_1407.close()
 
 
 fig = plt.figure()
-fig.suptitle('All tweets', fontsize=14, fontweight='bold')
+fig.suptitle('Tweets filtered for goal', fontsize=14, fontweight='bold')
 
 #plot for 12.07
 ax = fig.add_subplot(221)
