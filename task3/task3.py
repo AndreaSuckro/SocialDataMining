@@ -9,12 +9,15 @@ import pylab as plt
 import numpy as np
 import re
 import operator
+import collections
+
 #timespan in seconds (whole day:86400)
 timespan = 86400
 #scale of the graph (size of the time slots) in seconds
 skalierung = 60
 #only show topics in the plot that have at least x tweets
-thresh = 200
+thresh = 12000
+maxPlot = 20
 
 def getHashtags(row):
      return re.findall(r"#(\w+)", row)
@@ -31,7 +34,7 @@ print 'Start reading csv-file...'
 file = open('../data/numeric_20140712.csv', "rU")
 a = csv.reader(file,delimiter='\t')
 
-regEx = np.array(np.zeros(timespan/skalierung), dtype = dict)
+regEx = np.array(np.zeros(timespan), dtype = dict)
 
 for i in range(len(regEx)):
     regEx[i] = {}
@@ -57,42 +60,48 @@ for row in a:
                     regEx[index][matchL] += 1
                 except LookupError:
                     regEx[index][matchL] = 1
+
                   
 file.close()
 
-toPlot = {}
+toPlot = collections.OrderedDict()
 
 print 'Plot data...'
 
-fig = plt.figure()
-fig.suptitle('Hot Topics!')
-plt.xlabel('Time in minutes')
-plt.ylabel('Number of tweets in topic')
-
-for index,dic in enumerate(regEx):
-    if len(dic) >= 5:
-        biggest = dict(sorted(dic.iteritems(), key=operator.itemgetter(1),
-                              reverse=True)[:5])
+for index,tag in enumerate(regEx):
+    if len(tag) >= maxPlot:
+        biggest = dict(sorted(tag.iteritems(), key=operator.itemgetter(1),
+                              reverse=True)[:maxPlot])
     else:
-        biggest = dict(sorted(dic.iteritems(), key=operator.itemgetter(1),
-                              reverse=True)[:len(dic)])                 
+        biggest = dict(sorted(tag.iteritems(), key=operator.itemgetter(1),
+                              reverse=True)[:len(tag)])                        
     for hashtag in biggest:
         try:
             toPlot[hashtag][index] = biggest[hashtag]
         except LookupError:
             toPlot[hashtag] = np.zeros(timespan / skalierung)
             toPlot[hashtag][index] = biggest[hashtag]
-labels = []
-curves = []
-for hashtag in toPlot:
-    if max(toPlot[hashtag]) > thresh:
-        line, = plt.plot(toPlot[hashtag], label = hashtag)
-        labels.append(hashtag)
-        curves.append(line)
-plt.legend(curves,labels,loc="upper left")
-#plt.legend(labels)
-
-plt.show()
-        
 
 
+if skalierung < 86400:
+    labels = []
+    curves = []
+    
+    for hashtag in toPlot:
+        if sum(toPlot[hashtag]) > thresh:
+            line, = plt.plot(toPlot[hashtag], label = hashtag)
+            labels.append(hashtag)
+            curves.append(line)
+    plt.legend(curves,labels,loc="upper left")
+    plt.show()
+
+else:
+    y = toPlot.values()
+    x = range(0,len(y)*1,1)
+    f = plt.figure()
+    ax = f.add_axes([0.1, 0.1, 0.8, 0.8])
+    ax.barh(x, y, align = 'center')
+    ax.set_yticks(x)
+    ax.set_yticklabels(toPlot.keys())
+    f.show()
+    
