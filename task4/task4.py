@@ -40,14 +40,14 @@ print 'Start computing and counting topics...'
 for row in a:
     #only take rows with all columns
     if(len(row) > 5):
-        longitude = row[3]
-        breititude = row[4]
+        latidute = row[3]
+        longitude = row[4]
         date = row[2]
         #only take geolocations that can be passed        
-        if(is_number(longitude) and is_number(breititude) and is_number(date)):
+        if(is_number(longitude) and is_number(latidute) and is_number(date)):
                
                 #random rounding
-                geoLoc=(round(float(longitude)),round(float(breititude)))
+                geoLoc=(round(float(latidute)),round(float(longitude)))
                 
                 #just ignoring the 0,0 guys
                 if geoLoc != (0,0):
@@ -72,13 +72,13 @@ for row in a:
 file.close()
 
 json = open('loc.json','w')
-json.write('var data=[')
+json.write('[')
 
 for i in range(1440):
-    json.write('[\n \'series\''+str(i)+',[ ')
+    json.write('[\n'+str(i)+',[ ')
     series = ''
     for loc in geoValue[i].items():
-        ((lon,lat),mag) = loc
+        ((lat,lon),mag) = loc
         series = series + str(lat)+','+str(lon)+','+str(mag)+','
     #delete last comma
     series.rstrip(',')
